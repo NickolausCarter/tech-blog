@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <title>Tech Blog</title>
+  <link rel='stylesheet' href='/stylesheets/style.css'>
+</head>
+
+<body>
+  <div class='wrapper'>
+    <header class='hero'>
+      <div>
+        <nav class='nav'>
+          <a class='link' href='/'>Home</a>
+          <a class='link' href='/dashboard'>Dashboard</a>
+          {{#if loggedIn}}
+          <a class='link' href='/' id='logout'>Logout</a>
+          {{else}}
+          <a class='link' href='/login' id='login'>Login</a>
+          {{/if}}
+        </nav>
+      </div>
+
+      <h1 class='app-title'>The Tech Blog</h1>
+    </header>
+
+    <main>
+      {{{ body }}}
+    </main>
+  </div>
+
+  {{#if loggedIn}}
+  <script src='/javascript/logout.js'></script>
+  {{/if}}
+  <script>
+    var idleSecondsLimit = 10;
+    var idleSecondsCounter = 0;
+
+    document.onclick = function () {
+      idleSecondsCounter = 0;
+    };
+    document.onmousemove = function () {
+      idleSecondsCounter = 0;
+    };
+    document.onkeypress = function () {
+      idleSecondsCounter = 0;
+    };
+
+    var interval = window.setInterval(checkIdleTime, 1000);
+
+    function checkIdleTime() {
+      if ('{{loggedIn}}' == false) return;
+      idleSecondsCounter++;
+
+      if (idleSecondsCounter >= idleSecondsLimit) {
+        window.clearInterval(interval);
+        var idleMessage = `You are being logged out after ${idleSecondsLimit} seconds of inactivity.`;
+        logout();
+        alert(idleMessage);
+      }
+    }
+  </script>
+  
+</body>
+</html>
